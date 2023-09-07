@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,9 +61,8 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     json_string = json.dumps(top_ten_holdings, indent=4)
 
     basedir = os.path.abspath(os.path.dirname(__file__))
-    output = os.path.join(basedir, f'output\\{category}')
+    filename = Path(basedir)/'output'/category/f"{name.replace(' ', '-')}.json"
 
-    filename = os.path.join(output, f"{name.replace(' ', '-')}.json")
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     # print(json_string)
@@ -72,6 +72,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
         # file.write(json_string)
         file.close()
 
+    print(f"File: {filename}")
     print(f"Finished... {name}")
     print("---------------------------")
     return top_ten_holdings
