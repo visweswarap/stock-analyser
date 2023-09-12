@@ -17,7 +17,7 @@ def run():
     repeated_investments_inc_df.to_csv("report/mid_cap_repeated_investments_inc_positive.csv", index=False)
 
     most_invested_stocks_df = repeated_investments_inc_df.groupby('Stock Invested in').size().reset_index(name='count')
-    most_invested_stocks_filtered_df = most_invested_stocks_df[most_invested_stocks_df["count"] > 2]
+    most_invested_stocks_filtered_df = most_invested_stocks_df[most_invested_stocks_df["count"] > 1]
 
     most_invested_stocks_filtered_df.to_csv('report/mid_cap_most_invested_stocks_filtered.csv', index=False)
 
