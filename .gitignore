@@ -159,5 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 /src/analyze/file_name.csv
-/src/scrapper/output/*/*.json
+#/src/scrapper/output/*/*.json
 /.idea

@@ -27,13 +27,13 @@ def find_top_ten_holdings(soup: BeautifulSoup, fund_name: str):
         data = {
             "fund_name": fund_name,
             "stock_url": stock_link["href"],
-            "Stock Invested in": stock_link.text.strip(),
+            "Stock_Invested_in": stock_link.text.strip(),
             "Sector": columns[1].text.strip(),
             "Value_Mn": columns[2].text.strip(),
             "pct_of_total_holdings": columns[3].text.strip(),
             "1m_change": columns[4].text.strip(),
-            "1Y_Highest Holding": columns[5].text.strip(),
-            "1Y_Lowest Holding": columns[6].text.strip(),
+            "1Y_Highest_Holding": columns[5].text.strip(),
+            "1Y_Lowest_Holding": columns[6].text.strip(),
             "Quantity": columns[7].text.strip(),
             "1M_Change_in_Qty": columns[8].text.strip()
         }
