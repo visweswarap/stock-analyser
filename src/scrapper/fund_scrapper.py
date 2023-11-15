@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -8,6 +9,10 @@ import logging
 
 
 # url = "https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-growth/MAA011"
+
+today = datetime.today().strftime("%Y-%m-%d")
+output_dir = Path(f"archive/{today}")
+output_dir.mkdir(parents=True, exist_ok=True)
 
 
 def find_top_ten_holdings(soup: BeautifulSoup, fund_name: str):
@@ -62,6 +67,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
 
     basedir = os.path.abspath(os.path.dirname(__file__))
     filename = Path(basedir)/'output'/category/f"{name.replace(' ', '-')}.json"
+    filename1 = Path(basedir)/'output'/today/category/f"{name.replace(' ', '-')}.json"
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -71,6 +77,11 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
         json.dump(top_ten_holdings, file)
         # file.write(json_string)
         file.close()
+
+    with open(filename1, "w") as file1:
+        json.dump(top_ten_holdings, file1)
+        # file.write(json_string)
+        file1.close()
 
     print(f"File: {filename}")
     print(f"Finished... {name}")

@@ -15,6 +15,7 @@ url = mutual_funds_urls["mid-cap1"]
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def get_list(is_testing: bool = True):
+
     content = None
     if is_testing:
         content = open("test_input/mid-cap-equity-funds.html", encoding="utf8")
