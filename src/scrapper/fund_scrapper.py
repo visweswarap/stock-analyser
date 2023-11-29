@@ -11,7 +11,7 @@ import logging
 # url = "https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-growth/MAA011"
 
 today = datetime.today().strftime("%Y-%m-%d")
-output_dir = Path(f"archive/{today}")
+output_dir = Path(f'output/{today}/')
 output_dir.mkdir(parents=True, exist_ok=True)
 
 
@@ -66,8 +66,9 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     json_string = json.dumps(top_ten_holdings, indent=4)
 
     basedir = os.path.abspath(os.path.dirname(__file__))
+
     filename = Path(basedir)/'output'/category/f"{name.replace(' ', '-')}.json"
-    filename1 = Path(basedir)/'output'/today/category/f"{name.replace(' ', '-')}.json"
+    filename1 = output_dir/category/f"{name.replace(' ', '-')}.json"
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
