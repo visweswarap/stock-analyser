@@ -3,3 +3,4 @@ beautifulsoup4
 pandas
 glob2
 argparse
+psycopg2-binary
