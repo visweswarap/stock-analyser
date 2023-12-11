@@ -6,6 +6,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from scrapper.db_utils import write_to_funds_list
 from src.scrapper import fund_scrapper
 from src.scrapper.config import mutual_funds_urls
 
@@ -67,11 +68,12 @@ def get_list(is_testing: bool = True):
                     # Append the fund_info to the data list
                     data.append(fund_info)
                     funds_urls.append(fund_info["URL"])
-                    fund_scrapper.read_fund_details(False, fund_info["URL"],
-                                                    name=refined_scheme_name,
-                                                    category="mid-cap")
+                    # fund_scrapper.read_fund_details(False, fund_info["URL"],
+                    #                                 name=refined_scheme_name,
+                    #                                 category="mid-cap")
+                    logging.info("Sleeping for 2 seconds... zzz ZZZ")
                     time.sleep(2)
-
+                    logging.info("Ahh... That's a short sleep.  I am back.")
                 else:
                     logging.error(f"Fund URL is empty for: {refined_scheme_name}")
         except Exception as ex:
@@ -79,13 +81,13 @@ def get_list(is_testing: bool = True):
 
     # Convert the data list to JSON
     json_data = json.dumps(data, indent=4)
+    write_to_funds_list(data=data, file_path=None)
 
-    # Print the JSON data
-    # print(json_data)
+    #TODO: Remove file storage later. We are moving towards DB  storage.
     filename = f"output/funds/mid-cap-funds.json"
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as file:
         json.dump(data, file)
 
 
-get_list(is_testing=False)
+# get_list(is_testing=False)

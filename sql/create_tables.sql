@@ -12,4 +12,8 @@ CREATE TABLE funds_list (
     aum_cr NUMERIC
 );
 
+alter table public.funds_list add created_on DATE;
+
+alter table public.funds_list add modified_on DATE;
+
 
