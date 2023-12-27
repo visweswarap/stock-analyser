@@ -64,10 +64,10 @@ def get_list(is_testing: bool = True):
                     # Append the fund_info to the data list
                     data.append(fund_info)
                     small_cap_funds_urls.append(fund_info["URL"])
-                    # fund_scrapper.read_fund_details(False,
-                    #                                 fund_info["URL"],
-                    #                                 name=refined_scheme_name,
-                    #                                 category="small-cap")
+                    fund_scrapper.read_fund_details(False,
+                                                    fund_info["URL"],
+                                                    name=refined_scheme_name,
+                                                    category="small-cap")
                     logging.info("Sleeping for 2 seconds... zzz ZZZ")
                     time.sleep(2)
                     logging.info("Ahh... That's a short sleep.  I am back.")

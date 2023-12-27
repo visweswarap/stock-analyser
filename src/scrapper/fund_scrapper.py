@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import json
 import logging
 
+from scrapper import db_utils
 
 # url = "https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-growth/MAA011"
 
@@ -62,6 +63,8 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     print(amount.text.strip())
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
+
+    db_utils.save_fund_stocks(top_ten_holdings)
 
     json_string = json.dumps(top_ten_holdings, indent=4)
 
