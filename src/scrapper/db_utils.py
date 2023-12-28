@@ -118,25 +118,41 @@ def save_fund_stocks(data: list):
             stock_url = stock["stock_url"]
             stock_invested_in = stock["Stock_Invested_in"]
             sector = stock["Sector"]
-            value_mn = stock["Value_Mn"]
+            value_mn = float(stock["Value_Mn"])
             pct_of_total_holdings = float(stock["pct_of_total_holdings"].replace('%', ''))
             one_m_change = float(stock["1m_change"].replace('%', ''))
             one_y_highest_holding = stock["1Y_Highest_Holding"]
             one_y_lowest_holding = stock["1Y_Lowest_Holding"]
-            quantity = stock["Quantity"]
-            if str(stock["1M_Change_in_Qty"]).__contains__(" K".lower()):
-                one_m_change_in_qty = float(stock["1M_Change_in_Qty"].replace(" K", "")) * 1000
-            elif str(stock["1M_Change_in_Qty"]).__contains__(" M".lower()):
-                one_m_change_in_qty = float(stock["1M_Change_in_Qty"].replace(" M", "")) * 1000000
-            elif str(stock["1M_Change_in_Qty"]).__contains__(" L".lower()):
-                one_m_change_in_qty = float(stock["1M_Change_in_Qty"].replace(" L", "")) * 1000000
+            quantity = stock["Quantity"].upper()
+            if str(quantity).__contains__(" L"):
+                quantity = float(quantity.replace(" L", "")) * 100000
+            elif str(quantity).__contains__(" K"):
+                quantity = float(quantity.replace(" K", "")) * 1000
+            elif str(quantity).__contains__(" M"):
+                quantity = float(quantity.replace(" M", "")) * 1000000
+            elif str(quantity).__contains__(" CR"):
+                quantity = float(quantity.replace(" CR", "")) * 10000000
+            else:
+                quantity = float(quantity)
 
-            insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, Stock_Invested_in, Sector, Value_Mn, 
-                                pct_of_total_holdings, 1m_change, 1Y_Highest_Holding, Quantity, 1M_Change_in_Qty,
-                                created_on, modified_on) 
-                                VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', {int(value_mn)}, 
-                                '{pct_of_total_holdings}', {one_m_change}, '{one_y_highest_holding}', '{one_y_lowest_holding}',
-                                {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}');
+            m_change_in_qty = stock["1M_Change_in_Qty"].upper()
+            if str(m_change_in_qty).__contains__(' K'):
+                one_m_change_in_qty = float(m_change_in_qty.replace(" K", "")) * 1000
+            elif str(m_change_in_qty).__contains__(" M"):
+                one_m_change_in_qty = float(m_change_in_qty.replace(" M", "")) * 1000000
+            elif str(m_change_in_qty).__contains__(" L"):
+                one_m_change_in_qty = float(m_change_in_qty.replace(" L", "")) * 100000
+            elif str(m_change_in_qty).__contains__(" CR"):
+                one_m_change_in_qty = float(m_change_in_qty.replace(" CR", "")) * 10000000
+            else:
+                one_m_change_in_qty = float(m_change_in_qty)
+
+            insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, "Stock_Invested_in", 
+                                "Sector", "Value_Mn", pct_of_total_holdings, "1m_change", "1Y_Highest_Holding", 
+                                "1Y_Lowest_Holding", "Quantity", "1M_Change_in_Qty", created_on, modified_on) 
+                                VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', 
+                                {int(value_mn)}, '{pct_of_total_holdings}', {one_m_change}, '{one_y_highest_holding}', 
+                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}');
                             """
 
             cur.execute(insert_query)
