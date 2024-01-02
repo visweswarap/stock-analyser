@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 import psycopg2
@@ -67,6 +68,7 @@ def write_to_funds_list(data: list, file_path: str):
 
         conn.commit()
     except Exception as ex:
+        logging.error(f"saving to DB failed: {ex}")
         raise ex
     finally:
         # Close the cursor and connection
@@ -124,28 +126,10 @@ def save_fund_stocks(data: list):
             one_y_highest_holding = stock["1Y_Highest_Holding"]
             one_y_lowest_holding = stock["1Y_Lowest_Holding"]
             quantity = stock["Quantity"].upper()
-            if str(quantity).__contains__(" L"):
-                quantity = float(quantity.replace(" L", "")) * 100000
-            elif str(quantity).__contains__(" K"):
-                quantity = float(quantity.replace(" K", "")) * 1000
-            elif str(quantity).__contains__(" M"):
-                quantity = float(quantity.replace(" M", "")) * 1000000
-            elif str(quantity).__contains__(" CR"):
-                quantity = float(quantity.replace(" CR", "")) * 10000000
-            else:
-                quantity = float(quantity)
+            quantity = normalise_amount(quantity)
 
             m_change_in_qty = stock["1M_Change_in_Qty"].upper()
-            if str(m_change_in_qty).__contains__(' K'):
-                one_m_change_in_qty = float(m_change_in_qty.replace(" K", "")) * 1000
-            elif str(m_change_in_qty).__contains__(" M"):
-                one_m_change_in_qty = float(m_change_in_qty.replace(" M", "")) * 1000000
-            elif str(m_change_in_qty).__contains__(" L"):
-                one_m_change_in_qty = float(m_change_in_qty.replace(" L", "")) * 100000
-            elif str(m_change_in_qty).__contains__(" CR"):
-                one_m_change_in_qty = float(m_change_in_qty.replace(" CR", "")) * 10000000
-            else:
-                one_m_change_in_qty = float(m_change_in_qty)
+            one_m_change_in_qty = normalise_amount(m_change_in_qty)
 
             insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, "Stock_Invested_in", 
                                 "Sector", "Value_Mn", pct_of_total_holdings, "1m_change", "1Y_Highest_Holding", 
@@ -159,12 +143,26 @@ def save_fund_stocks(data: list):
 
         conn.commit()
     except Exception as ex:
+        logging.error(f"saving to DB failed: {ex}")
         raise ex
     finally:
         # Close the cursor and connection
         cur.close()
         conn.close()
 
+
+def normalise_amount(value: str):
+    if value.__contains__(" L"):
+        value = float(value.replace(" L", "")) * 100000
+    elif value.__contains__(" K"):
+        value = float(value.replace(" K", "")) * 1000
+    elif value.__contains__(" M"):
+        value = float(value.replace(" M", "")) * 1000000
+    elif value.__contains__(" CR"):
+        value = float(value.replace(" CR", "")) * 10000000
+    else:
+        value = float(value)
+    return value
 
 # write_to_funds_list(file_path="output/funds/mid-cap-funds.json")
 # write_to_funds_list(file_path="output/funds/small-cap-funds.json")

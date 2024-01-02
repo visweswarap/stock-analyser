@@ -4,3 +4,4 @@ pandas
 glob2
 argparse
 psycopg2-binary
+selenium==4.16.0

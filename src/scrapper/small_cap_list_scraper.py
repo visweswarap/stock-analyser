@@ -44,7 +44,7 @@ def get_list(is_testing: bool = True):
             refined_scheme_name = scheme_link.text
 
         logging.info("\n###################")
-        logging.info(refined_scheme_name)
+        logging.info(f"refined_scheme_name: {refined_scheme_name}")
 
         fund_info['Scheme-Name'] = refined_scheme_name
         fund_info['URL'] = scheme_link['href']

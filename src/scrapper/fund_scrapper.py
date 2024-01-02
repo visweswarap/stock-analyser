@@ -60,7 +60,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     # Find the elements that contain the data you want
     amount = soup.find("span", class_="amt")
     # fund_name_element = soup.find("h1", class_="b_42")
-    print(amount.text.strip())
+    logging.info(f"Nav: {amount.text.strip()}")
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
 
@@ -71,7 +71,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     basedir = os.path.abspath(os.path.dirname(__file__))
 
     filename = Path(basedir)/'output'/category/f"{name.replace(' ', '-')}.json"
-    filename1 = output_dir/category/f"{name.replace(' ', '-')}.json"
+    # filename1 = output_dir/category/f"{name.replace(' ', '-')}.json"
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -82,13 +82,13 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
         # file.write(json_string)
         file.close()
 
-    with open(filename1, "w") as file1:
-        json.dump(top_ten_holdings, file1)
-        # file.write(json_string)
-        file1.close()
+    # with open(filename1, "w") as file1:
+    #     json.dump(top_ten_holdings, file1)
+    #     # file.write(json_string)
+    #     file1.close()
 
-    print(f"File: {filename}")
-    print(f"Finished... {name}")
+    logging.info(f"File: {filename}")
+    logging.info(f"Finished... {name}")
     print("---------------------------")
     return top_ten_holdings
 
