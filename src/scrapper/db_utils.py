@@ -151,6 +151,46 @@ def save_fund_stocks(data: list):
         conn.close()
 
 
+def save_hni_portfolio(portfolio: list):
+    if portfolio is None or portfolio == []:
+        logging.error("Want me to save none hni data ? Lets be practical!")
+    # dt = datetime.now().replace(microsecond=0)
+    conn = db_connection()
+    cur = conn.cursor()
+
+    table_name = "hni_portfolio"
+    try:
+        for data in portfolio:
+            # Convert Python types to PostgreSQL types
+            data["quantity_held"] = float(data["quantity_held"].replace(",", ""))
+            data["holding_pct"] = float(data["holding_pct"].replace('%', '').strip())
+            data["holding_value"] = float(data["holding_value"].replace(",", ""))
+            data["net_worth"] = float(data["net_worth"].replace(",", ""))
+            data["portfolio_id"] = int(data["portfolio_id"])
+
+            # Generate SQL insert statement
+            insert_statement = f"INSERT INTO {table_name} ({', '.join(data.keys())}, created_date, modified_date) VALUES ("
+            for key, value in data.items():
+                if isinstance(value, str):
+                    insert_statement += f"'{value}', "
+                else:
+                    insert_statement += f"{value}, "
+
+            # Add current date for created_date and modified_date
+            insert_statement += "CURRENT_DATE, CURRENT_DATE);"
+            print(insert_statement)
+            cur.execute(insert_statement)
+        conn.commit()
+    except Exception as ex:
+        logging.error("Failed to save HNI data to DB")
+        logging.error(ex)
+        raise ex
+    finally:
+        # Close the cursor and connection
+        cur.close()
+        conn.close()
+
+
 def normalise_amount(value: str):
     if value.__contains__(" L"):
         value = float(value.replace(" L", "")) * 100000

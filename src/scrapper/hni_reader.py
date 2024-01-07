@@ -4,6 +4,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from scrapper import db_utils
+
 
 def setup_logging():
     # Configure the logging format
@@ -34,6 +36,7 @@ def read():
             individual_investors.append(investor)
             portfolio = read_hni_portfolio(hni_portfolio_url.format(investor['slug']), investor)
             investor["portfolio"] = portfolio
+            db_utils.save_hni_portfolio(portfolio)
             logging.info("Going to sleep for 5 seconds before reading another HNI.")
             time.sleep(5)
             logging.info("Back after 5 seconds sleep.  My alarm works :(")
@@ -63,10 +66,13 @@ def read_hni_portfolio(url: str, investor: dict = None):
             try:
                 # Extract data from each row
                 stock_name = row.find('td', {'class': f'name_{count}'}).text.strip()
+                stock_url = row.find('td', class_=f'name_{count}').find('a')['href']
                 quantity_held = row.find('td', {'class': f'quantityHeld_{count}'}).text.strip()
                 holding_pct = row.find('td', {'class': f'holdingPer_{count}'}).text.strip()
                 change_from_prev_qtr_value = row.find('td', {'class': f'changePrev_{count}'}).text.strip()
                 holding_value = row.find('td', {'class': f'holdingVal_{count}'}).text.strip()
+                if stock_name.__contains__("'"):
+                    stock_name = stock_name.replace("'", "")
 
                 entries.append({"stock_name": stock_name,
                                 "quantity_held": quantity_held,
@@ -77,7 +83,7 @@ def read_hni_portfolio(url: str, investor: dict = None):
                                 "net_worth": investor.get("netWorth"),
                                 "portfolio_id": investor.get("portfolioId"),
                                 "slug": investor.get("slug"),
-                                "source": "money_control"
+                                "source": "money-control"
                                 })
                 # print(entries)
                 count += 1
