@@ -41,3 +41,21 @@ alter table public.stocks_by_fund add created_on DATE;
 alter table public.stocks_by_fund add modified_on DATE;
 
 
+-- HNI Portfolio
+CREATE TABLE IF NOT EXISTS hni_portfolio (
+    id SERIAL PRIMARY KEY,
+    stock_name VARCHAR(255),
+    quantity_held DECIMAL(18, 2),
+    holding_pct DECIMAL(5, 2),
+    change_from_prev_qtr_value VARCHAR(255),
+    holding_value DECIMAL(18, 2),
+    name VARCHAR(255),
+    net_worth DECIMAL(18, 2),
+    portfolio_id VARCHAR(255),
+    slug VARCHAR(255),
+    source VARCHAR(255),
+    created_date DATE,
+    modified_date DATE
+);
+
+ALTER TABLE stocks_by_fund OWNER TO postgres;

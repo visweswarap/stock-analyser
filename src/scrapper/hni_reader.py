@@ -32,7 +32,7 @@ def read():
         result = requests.get(url.format(i)).json()
         for investor in result['investIND']:
             individual_investors.append(investor)
-            portfolio = read_hni_portfolio(hni_portfolio_url.format(investor['slug']))
+            portfolio = read_hni_portfolio(hni_portfolio_url.format(investor['slug']), investor)
             investor["portfolio"] = portfolio
             logging.info("Going to sleep for 5 seconds before reading another HNI.")
             time.sleep(5)
@@ -42,7 +42,7 @@ def read():
     print(individual_investors)
 
 
-def read_hni_portfolio(url: str):
+def read_hni_portfolio(url: str, investor: dict = None):
     logging.info(f"Going to read: {url}")
 
     html_content = requests.get(url).content
@@ -72,7 +72,13 @@ def read_hni_portfolio(url: str):
                                 "quantity_held": quantity_held,
                                 "holding_pct": holding_pct,
                                 "change_from_prev_qtr_value": change_from_prev_qtr_value,
-                                "holding_value": holding_value})
+                                "holding_value": holding_value,
+                                "name": investor.get("name"),
+                                "net_worth": investor.get("netWorth"),
+                                "portfolio_id": investor.get("portfolioId"),
+                                "slug": investor.get("slug"),
+                                "source": "money_control"
+                                })
                 # print(entries)
                 count += 1
             except Exception as ex:
