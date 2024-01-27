@@ -48,7 +48,8 @@ def find_top_ten_holdings(soup: BeautifulSoup, fund_name: str):
     return json_data
 
 
-def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str = None, category: str = None):
+def read_fund_details(is_testing: bool = True, fund_url: str = None,
+                      name: str = None, category: str = None):
     if is_testing:
         content = open('test_input/axis-long-term.txt', encoding="utf8")
     else:
@@ -57,37 +58,14 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None, name: str =
     # print(content)
     soup = BeautifulSoup(content, "html.parser")
 
-    # Find the elements that contain the data you want
+    # Find the elements that contain the data
     amount = soup.find("span", class_="amt")
-    # fund_name_element = soup.find("h1", class_="b_42")
     logging.info(f"Nav: {amount.text.strip()}")
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
 
     db_utils.save_fund_stocks(top_ten_holdings)
 
-    json_string = json.dumps(top_ten_holdings, indent=4)
-
-    basedir = os.path.abspath(os.path.dirname(__file__))
-
-    filename = Path(basedir)/'output'/category/f"{name.replace(' ', '-')}.json"
-    # filename1 = output_dir/category/f"{name.replace(' ', '-')}.json"
-
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-
-    # print(json_string)
-
-    with open(filename, "w") as file:
-        json.dump(top_ten_holdings, file)
-        # file.write(json_string)
-        file.close()
-
-    # with open(filename1, "w") as file1:
-    #     json.dump(top_ten_holdings, file1)
-    #     # file.write(json_string)
-    #     file1.close()
-
-    logging.info(f"File: {filename}")
     logging.info(f"Finished... {name}")
     print("---------------------------")
     return top_ten_holdings

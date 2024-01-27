@@ -34,7 +34,7 @@ def write_to_funds_list(data: list, file_path: str):
     crisil_rank INTEGER,
     aum_cr NUMERIC
     """
-    dt = datetime.now().replace(microsecond=0)
+    dt: datetime = datetime.now().replace(microsecond=0)
     conn = db_connection()
     cur = conn.cursor()
     try:
@@ -183,6 +183,31 @@ def save_hni_portfolio(portfolio: list):
         conn.commit()
     except Exception as ex:
         logging.error("Failed to save HNI data to DB")
+        logging.error(ex)
+        raise ex
+    finally:
+        # Close the cursor and connection
+        cur.close()
+        conn.close()
+
+
+def delete_current_month_data_before(category: str):
+    if category is None or category == "":
+        logging.error("You are deleting data without category? Be cautious!")
+    # dt = datetime.now().replace(microsecond=0)
+    conn = db_connection()
+    cur = conn.cursor()
+    try:
+        # Generate SQL insert statement
+        insert_statement = (f"DELETE FROM stocks_by_fund "
+                            f"WHERE EXTRACT(MONTH FROM created_on) = EXTRACT(MONTH FROM CURRENT_DATE) "
+                            f"AND EXTRACT(YEAR FROM created_on) = EXTRACT(YEAR FROM CURRENT_DATE)"
+                            f"AND ;")
+        print(insert_statement)
+        cur.execute(insert_statement)
+        conn.commit()
+    except Exception as ex:
+        logging.error("Failed to delete current month data from DB")
         logging.error(ex)
         raise ex
     finally:

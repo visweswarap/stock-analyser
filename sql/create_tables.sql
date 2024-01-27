@@ -40,6 +40,8 @@ alter table public.stocks_by_fund add created_on DATE;
 
 alter table public.stocks_by_fund add modified_on DATE;
 
+alter table public.stocks_by_fund add category varchar;
+
 
 -- HNI Portfolio
 CREATE TABLE IF NOT EXISTS hni_portfolio (
