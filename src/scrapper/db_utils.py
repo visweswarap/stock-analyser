@@ -154,6 +154,7 @@ def save_fund_stocks(data: list):
 def save_hni_portfolio(portfolio: list):
     if portfolio is None or portfolio == []:
         logging.error("Want me to save none hni data ? Lets be practical!")
+        return
     # dt = datetime.now().replace(microsecond=0)
     conn = db_connection()
     cur = conn.cursor()
@@ -162,6 +163,16 @@ def save_hni_portfolio(portfolio: list):
     try:
         for data in portfolio:
             # Convert Python types to PostgreSQL types
+            logging.info(data)
+            if data["quantity_held"] == '':
+                data["quantity_held"] = '0'
+            if data["holding_pct"] == '':
+                data["holding_pct"] = '0'
+            if data["holding_value"] == '':
+                data["holding_value"] = '0'
+            if data["net_worth"] == '':
+                data["net_worth"] = '0'
+
             data["quantity_held"] = float(data["quantity_held"].replace(",", ""))
             data["holding_pct"] = float(data["holding_pct"].replace('%', '').strip())
             data["holding_value"] = float(data["holding_value"].replace(",", ""))

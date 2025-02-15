@@ -53,5 +53,6 @@ def scrape_each_item(data: list, funds_urls: list, category: str, row: ResultSet
         logging.error(ex)
 
     # Convert the data list to JSON
-
-    write_to_funds_list(data=data, file_path=None)
+    json_data = json.dumps(data)
+    print(json_data)
+    # write_to_funds_list(data=data, file_path=None)

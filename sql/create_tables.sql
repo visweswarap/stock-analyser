@@ -1,8 +1,8 @@
-create database mutualfunds;
+-- create database mutualfunds;
 grant ALL on database mutualfunds to postgres;
 
 -- Create table
-CREATE TABLE IF NOT EXISTS funds_list (
+CREATE TABLE IF NOT EXISTS mutualfunds.public.funds_list (
     id SERIAL PRIMARY KEY,
     scheme_name VARCHAR(255),
     url VARCHAR(255),
@@ -12,13 +12,13 @@ CREATE TABLE IF NOT EXISTS funds_list (
     aum_cr NUMERIC
 );
 
-alter table public.funds_list add created_on DATE;
+alter table mutualfunds.public.funds_list add created_on DATE;
 
-alter table public.funds_list add modified_on DATE;
+alter table mutualfunds.public.funds_list add modified_on DATE;
 
 
 -- stocks_by_fund
-CREATE TABLE IF NOT EXISTS stocks_by_fund
+CREATE TABLE IF NOT EXISTS mutualfunds.public.stocks_by_fund
 (
     id                    serial,
     fund_name             varchar,
@@ -34,17 +34,17 @@ CREATE TABLE IF NOT EXISTS stocks_by_fund
     "1M_Change_in_Qty"    double precision
 );
 
-ALTER TABLE stocks_by_fund OWNER TO postgres;
+ALTER TABLE mutualfunds.public.stocks_by_fund OWNER TO postgres;
 
-alter table public.stocks_by_fund add created_on DATE;
+alter table mutualfunds.public.stocks_by_fund add created_on DATE;
 
-alter table public.stocks_by_fund add modified_on DATE;
+alter table mutualfunds.public.stocks_by_fund add modified_on DATE;
 
-alter table public.stocks_by_fund add category varchar;
+alter table mutualfunds.public.stocks_by_fund add category varchar;
 
 
 -- HNI Portfolio
-CREATE TABLE IF NOT EXISTS hni_portfolio (
+CREATE TABLE IF NOT EXISTS mutualfunds.public.hni_portfolio (
     id SERIAL PRIMARY KEY,
     stock_name VARCHAR(255),
     quantity_held DECIMAL(18, 2),
@@ -60,4 +60,4 @@ CREATE TABLE IF NOT EXISTS hni_portfolio (
     modified_date DATE
 );
 
-ALTER TABLE stocks_by_fund OWNER TO postgres;
+ALTER TABLE mutualfunds.public.stocks_by_fund OWNER TO postgres;
