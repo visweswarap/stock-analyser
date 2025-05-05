@@ -64,7 +64,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
 
-    db_utils.save_fund_stocks(top_ten_holdings)
+    db_utils.save_fund_stocks(top_ten_holdings, db_type='sqlite', category=category)
 
     logging.info(f"Finished... {name}")
     print("---------------------------")

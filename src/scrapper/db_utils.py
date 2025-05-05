@@ -1,18 +1,23 @@
 import json
 import logging
 from datetime import datetime
-
+import sqlite3
 import psycopg2
 
 
-def db_connection():
-    dbname = 'mutualfunds'
-    user = 'postgres'
-    password = 'postgres'
-    host = 'localhost'
-    port = '5432'
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
-    return conn
+def get_db_connection(db_type='sqlite'):
+    if db_type == 'postgres':
+        dbname = 'mutualfunds'
+        user = 'postgres'
+        password = 'postgres'
+        host = 'localhost'
+        port = '5432'
+        conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        return conn
+    else:
+        # Default to SQLite
+        conn = sqlite3.connect('mutualfunds.db')
+        return conn
 
 
 def write_to_funds_list(data: list, file_path: str):
@@ -35,7 +40,7 @@ def write_to_funds_list(data: list, file_path: str):
     aum_cr NUMERIC
     """
     dt: datetime = datetime.now().replace(microsecond=0)
-    conn = db_connection()
+    conn = get_db_connection()
     cur = conn.cursor()
     try:
         if data is None and file_path is not None:
@@ -77,7 +82,7 @@ def write_to_funds_list(data: list, file_path: str):
     print(funds_list)
 
 
-def save_fund_stocks(data: list):
+def save_fund_stocks(data: list, db_type='sqlite', category=None):
     """
 {
     "fund_name": "Aditya Birla Sun Life Midcap Fund - Direct Plan - Growth",
@@ -106,7 +111,7 @@ def save_fund_stocks(data: list):
     "1M_Change_in_Qty"    double precision
     """
     dt = datetime.now().replace(microsecond=0)
-    conn = db_connection()
+    conn = get_db_connection()
     cur = conn.cursor()
     try:
         if data is None:
@@ -127,18 +132,27 @@ def save_fund_stocks(data: list):
             one_y_lowest_holding = stock["1Y_Lowest_Holding"]
             quantity = stock["Quantity"].upper()
             quantity = normalise_amount(quantity)
-
             m_change_in_qty = stock["1M_Change_in_Qty"].upper()
             one_m_change_in_qty = normalise_amount(m_change_in_qty)
 
-            insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, "Stock_Invested_in", 
-                                "Sector", "Value_Mn", pct_of_total_holdings, "1m_change", "1Y_Highest_Holding", 
-                                "1Y_Lowest_Holding", "Quantity", "1M_Change_in_Qty", created_on, modified_on) 
-                                VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', 
+            if db_type == 'sqlite':
+                insert_query = f"""
+                INSERT INTO stocks_by_fund (
+                    fund_name, stock_url, Stock_Invested_in, Sector, Value_Mn, pct_of_total_holdings,
+                    one_m_change, one_y_highest_holding, one_y_lowest_holding, Quantity, one_m_change_in_qty,
+                    created_on, modified_on, category)
+                VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', 
                                 {int(value_mn)}, '{pct_of_total_holdings}', {one_m_change}, '{one_y_highest_holding}', 
-                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}');
+                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}', '{category}');
+                """
+            elif db_type == 'postgres':
+                insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, "Stock_Invested_in", 
+                                "Sector", "Value_Mn", pct_of_total_holdings, "1m_change", "1Y_Highest_Holding", 
+                                "1Y_Lowest_Holding", "Quantity", "1M_Change_in_Qty", created_on, modified_on, category) 
+                              VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', 
+                                {int(value_mn)}, '{pct_of_total_holdings}', {one_m_change}, '{one_y_highest_holding}', 
+                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}', '{category}');
                             """
-
             cur.execute(insert_query)
 
         conn.commit()
@@ -156,7 +170,7 @@ def save_hni_portfolio(portfolio: list):
         logging.error("Want me to save none hni data ? Lets be practical!")
         return
     # dt = datetime.now().replace(microsecond=0)
-    conn = db_connection()
+    conn = get_db_connection()
     cur = conn.cursor()
 
     table_name = "hni_portfolio"
@@ -206,7 +220,7 @@ def delete_current_month_data_before(category: str):
     if category is None or category == "":
         logging.error("You are deleting data without category? Be cautious!")
     # dt = datetime.now().replace(microsecond=0)
-    conn = db_connection()
+    conn = get_db_connection()
     cur = conn.cursor()
     try:
         # Generate SQL insert statement

@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 from scrapper.db_utils import write_to_funds_list
 from scrapper.utils import scrape_each_item
-from src.scrapper import fund_scrapper
+from scrapper import fund_scrapper
 
 url = "https://www.moneycontrol.com/mutual-funds/performance-tracker/returns/small-cap-fund.html"
 
