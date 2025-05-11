@@ -34,7 +34,7 @@ def get_list(is_testing: bool = True):
     # Iterate through each row in the table body
     for row in table_body.find_all('tr'):
         time.sleep(3)
-        scrape_each_item(data=data, funds_urls=funds_urls, category="small-cap", row=row)
+        # scrape_each_item(data=data, funds_urls=funds_urls, category="small-cap", row=row)
         fund_info = {}
 
         # Extract scheme name and URL
