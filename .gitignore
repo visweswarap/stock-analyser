@@ -161,3 +161,4 @@ cython_debug/
 /src/analyze/file_name.csv
 #/src/scrapper/output/*/*.json
 /.idea
+.DS_Store/
