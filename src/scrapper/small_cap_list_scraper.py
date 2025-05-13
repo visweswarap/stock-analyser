@@ -79,8 +79,8 @@ def get_list(is_testing: bool = True):
             logging.error(ex)
 
     # Convert the data list to JSON
-    json_data = json.dumps(data, indent=4)
-    print(json_data)
+    # json_data = json.dumps(data, indent=4)
+    # print(json_data)
     write_to_funds_list(data=data, file_path=None)
 
 

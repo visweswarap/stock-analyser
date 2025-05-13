@@ -10,7 +10,31 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/main.py",
-            "args": ["-category=mid-cap"],
+            "args": ["-category=small-cap"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "start-large-cap",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "args": ["-category=large-cap"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "start-snall-cap",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "args": ["-category=small-cap"],
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONUNBUFFERED": "1"
