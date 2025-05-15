@@ -62,9 +62,21 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
     amount = soup.find("span", class_="amt")
     logging.info(f"Nav: {amount.text.strip()}")
 
+    # Portfolio Date Ex: "30th Apr,2025
+    portfolio_date = None
+    span = soup.find('span', string=lambda t: t and '(Updated on' in t)
+    if span:
+        # Extract the text and find the date
+        span_text = span.get_text()
+        portfolio_date = span_text.replace('(', '').replace(')', '').replace('Updated on', '').strip()
+    else:
+        portfolio_date = None
+    # TODO: Convert to DATE format"
+    # data["portfolio_date"] = portfolio_date
+
     top_ten_holdings = find_top_ten_holdings(soup, name)
 
-    db_utils.save_fund_stocks(top_ten_holdings, db_type='sqlite', category=category)
+    db_utils.save_fund_stocks(top_ten_holdings, db_type='sqlite', category=category, portfolio_date=portfolio_date)
 
     logging.info(f"Finished... {name}")
     print("---------------------------")

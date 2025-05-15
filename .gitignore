@@ -162,3 +162,8 @@ cython_debug/
 #/src/scrapper/output/*/*.json
 /.idea
 .DS_Store/
+/.DS_Store
+src/.DS_Store
+src/analyze/.DS_Store
+src/scrapper/.DS_Store
+src/scrapper/output/.DS_Store

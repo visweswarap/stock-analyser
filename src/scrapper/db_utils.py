@@ -82,7 +82,7 @@ def write_to_funds_list(data: list, file_path: str):
     print(funds_list)
 
 
-def save_fund_stocks(data: list, db_type='sqlite', category=None):
+def save_fund_stocks(data: list, db_type='sqlite', category=None, portfolio_date=None):
     """
 {
     "fund_name": "Aditya Birla Sun Life Midcap Fund - Direct Plan - Growth",
@@ -134,6 +134,7 @@ def save_fund_stocks(data: list, db_type='sqlite', category=None):
             quantity = normalise_amount(quantity)
             m_change_in_qty = stock["1M_Change_in_Qty"].upper()
             one_m_change_in_qty = normalise_amount(m_change_in_qty)
+            portfolio_date = portfolio_date
 
             if db_type == 'sqlite':
                 insert_query = f"""
