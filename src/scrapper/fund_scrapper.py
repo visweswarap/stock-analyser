@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import logging
+import re
 
 from scrapper import db_utils
 
@@ -71,7 +72,13 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
         portfolio_date = span_text.replace('(', '').replace(')', '').replace('Updated on', '').strip()
     else:
         portfolio_date = None
-    # TODO: Convert to DATE format"
+   
+    date_str = portfolio_date
+    date_str_clean = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date_str)
+    date_str_clean = date_str_clean.replace(',', ', ')
+    
+    portfolio_date = datetime.strptime(date_str_clean, "%d %b, %Y").date()
+    
     # data["portfolio_date"] = portfolio_date
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
