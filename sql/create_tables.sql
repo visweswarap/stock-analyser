@@ -41,7 +41,7 @@ alter table mutualfunds.public.stocks_by_fund add created_on DATE;
 alter table mutualfunds.public.stocks_by_fund add modified_on DATE;
 
 alter table mutualfunds.public.stocks_by_fund add category varchar;
-
+alter table mutualfunds.public.stocks_by_fund add portfolio_date DATE;
 
 -- HNI Portfolio
 CREATE TABLE IF NOT EXISTS mutualfunds.public.hni_portfolio (

@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS stocks_by_fund (
     category TEXT
 );
 
+ALTER TABLE stocks_by_fund ADD COLUMN "portfolio_date" DATE;
+
 -- hni_portfolio table
 CREATE TABLE IF NOT EXISTS hni_portfolio (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
