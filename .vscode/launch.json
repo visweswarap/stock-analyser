@@ -10,7 +10,7 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/main.py",
-            "args": ["-category=small-cap"],
+            "args": ["-category=large-cap"],
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONUNBUFFERED": "1"

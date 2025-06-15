@@ -5,7 +5,7 @@ from scrapper.config import mutual_funds_urls
 from scrapper import fund_scrapper
 import time
 
-url = mutual_funds_urls["large-cap"]
+url = mutual_funds_urls["flexi-cap"]
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -13,7 +13,7 @@ def get_list(is_testing: bool = True):
 
     content = None
     if is_testing:
-        content = open("test_input/large-cap-equity-funds.html", encoding="utf8")
+        content = open("test_input/flexi-cap-equity-funds.html", encoding="utf8")
     else:
         content = requests.get(url).content
 
@@ -30,7 +30,7 @@ def get_list(is_testing: bool = True):
     # Iterate through each row in the table body
     for row in table_body.find_all('tr'):
         time.sleep(3)
-        # scrape_each_item(data=data, funds_urls=funds_urls, category="large-cap", row=row)
+        # scrape_each_item(data=data, funds_urls=funds_urls, category="flexi-cap", row=row)
         fund_info = {}
             # Extract scheme name and URL
         scheme_link = row.find('a', class_='robo_medium')
@@ -61,7 +61,7 @@ def get_list(is_testing: bool = True):
                     funds_urls.append(fund_info["URL"])
                     fund_scrapper.read_fund_details(False, fund_info["URL"],
                                                     name=refined_scheme_name,
-                                                    category="large-cap")
+                                                    category="flexi-cap")
                     logging.info("Sleeping for 2 seconds... zzz ZZZ")
                     time.sleep(2)
                     logging.info("Ahh... That's a short sleep.  I am back.")
