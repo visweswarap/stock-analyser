@@ -30,6 +30,9 @@ if __name__ == '__main__':
     elif args["category"] == 'flexi-cap':
         from scrapper import flexi_cap_list_scraper as fc
         fc.get_list(False)    
+    elif args["category"] == 'large-and-mid-cap':
+        from scrapper import large_mid_cap_list_scraper as lmc
+        lmc.get_list(False)      
     else:  # default small cap
         from scrapper import mid_cap_list_scraper as mc
         mc.get_list(False)
