@@ -136,9 +136,9 @@ def save_fund_stocks(data: list, db_type='sqlite', category=None, portfolio_date
             one_m_change_in_qty = normalise_amount(m_change_in_qty)
             portfolio_date = portfolio_date
 
+            insert_query = ""
             if db_type == 'sqlite':
-                insert_query = f"""
-                INSERT INTO stocks_by_fund (
+                insert_query = f"""INSERT INTO stocks_by_fund (
                     fund_name, stock_url, Stock_Invested_in, Sector, Value_Mn, pct_of_total_holdings,
                     one_m_change, one_y_highest_holding, one_y_lowest_holding, Quantity, one_m_change_in_qty,
                     created_on, modified_on, category, portfolio_date)
@@ -149,10 +149,10 @@ def save_fund_stocks(data: list, db_type='sqlite', category=None, portfolio_date
             elif db_type == 'postgres':
                 insert_query = f"""INSERT INTO stocks_by_fund (fund_name, stock_url, "Stock_Invested_in", 
                                 "Sector", "Value_Mn", pct_of_total_holdings, "1m_change", "1Y_Highest_Holding", 
-                                "1Y_Lowest_Holding", "Quantity", "1M_Change_in_Qty", created_on, modified_on, category) 
+                                "1Y_Lowest_Holding", "Quantity", "1M_Change_in_Qty", created_on, modified_on, category, portfolio_date) 
                               VALUES ('{fund_name}', '{stock_url}', '{stock_invested_in}', '{sector}', 
                                 {int(value_mn)}, '{pct_of_total_holdings}', {one_m_change}, '{one_y_highest_holding}', 
-                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}', '{category}');
+                                '{one_y_lowest_holding}', {quantity}, {one_m_change_in_qty}, '{dt}', '{dt}', '{category}', '{portfolio_date}');
                             """
             cur.execute(insert_query)
 
