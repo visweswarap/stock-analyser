@@ -14,7 +14,7 @@ from scrapper.config import mutual_funds_urls
 # url = "https://www.moneycontrol.com/mutual-funds/performance-tracker/returns/small-cap-fund.html"
 url = mutual_funds_urls["mid-cap1"]
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def get_list(is_testing: bool = True):
@@ -37,7 +37,7 @@ def get_list(is_testing: bool = True):
 
     # Iterate through each row in the table body
     for row in table_body.find_all('tr'):
-        time.sleep(3)
+        time.sleep(1)
         # scrape_each_item(data=data, funds_urls=funds_urls, category="mid-cap", row=row)
         fund_info = {}
             # Extract scheme name and URL

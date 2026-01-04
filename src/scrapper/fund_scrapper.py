@@ -61,7 +61,10 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
 
     # Find the elements that contain the data
     amount = soup.find("span", class_="amt")
-    logging.info(f"Nav: {amount.text.strip()}")
+    if amount:
+        logging.info(f"Nav: {amount.text.strip()}")
+    else:
+        logging.error(f"Failed reading amount of fund: {name}")
 
     # Portfolio Date Ex: "30th Apr,2025
     portfolio_date = None
@@ -72,6 +75,7 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
         portfolio_date = span_text.replace('(', '').replace(')', '').replace('Updated on', '').strip()
     else:
         portfolio_date = None
+        logging.error("Failed to read portfolio date.")
    
     date_str = portfolio_date
     date_str_clean = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date_str)

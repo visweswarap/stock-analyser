@@ -33,6 +33,8 @@ This project scrapes, analyzes, and reports on Indian mutual fund holdings, focu
   python src/scrapper/small_cap_list_scraper.py
   python src/scrapper/large_cap_list_scraper.py
   ```
+`python src/main.py -category=small-cap`  
+
 - Output and logs will be saved in the `output/` directory
 
 ### Database Tables
