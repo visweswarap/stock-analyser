@@ -8,9 +8,9 @@ import json
 import logging
 import re
 
-from scrapper import db_utils
+# from ..scrapper import db_utils
 
-# url = "https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-growth/MAA011"
+url = "https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-growth/MAA011"
 
 today = datetime.today().strftime("%Y-%m-%d")
 output_dir = Path(f'output/{today}/')
@@ -87,10 +87,10 @@ def read_fund_details(is_testing: bool = True, fund_url: str = None,
 
     top_ten_holdings = find_top_ten_holdings(soup, name)
 
-    db_utils.save_fund_stocks(top_ten_holdings, db_type='sqlite', category=category, portfolio_date=portfolio_date)
+    # db_utils.save_fund_stocks(top_ten_holdings, db_type='sqlite', category=category, portfolio_date=portfolio_date)
 
     logging.info(f"Finished... {name}")
     print("---------------------------")
     return top_ten_holdings
 
-# read_fund_details(is_testing=False, url=url)
+read_fund_details(is_testing=False, fund_url=url)
