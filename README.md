@@ -51,5 +51,5 @@ This project scrapes, analyzes, and reports on Indian mutual fund holdings, focu
 - Open issues or pull requests for bugs and improvements
 
 ## Contact
-- Repo owner: Vish Pepala, vish.pepala@spglobal.com
+- Repo owner: Vish Pepala, vish.pepala@gmail.com
 - For questions, open an issue or contact the maintainer
