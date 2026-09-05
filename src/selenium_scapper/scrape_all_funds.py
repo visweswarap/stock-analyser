@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Import the fund lists and scraper
-from funds_constants import mid_cap
+from funds_constants import moneycontrol_mid_cap as mid_cap
 from selenium_scrapper import scrape_fund
 
 
